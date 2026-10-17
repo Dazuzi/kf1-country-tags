@@ -28,19 +28,12 @@ function Timer() {
 }
 
 final function bool GetClientCountry() {
-	local array<string> Octets;
 	local string IP;
-	local int Decimal;
 	if (NetConnection(Client.Player) == none) {
 		Destroy();
 		return false;
 	}
 	IP = Client.GetPlayerNetworkAddress();
-	IP = Left(IP,InStr(IP,":"));
-	if (IP == MasterHandler.HostLanIpAddr)
-		IP = MasterHandler.HostWanIpAddr;
-	Split(IP, ".", Octets);
-	Decimal = int(Octets[0]) * 256 ** 2 + int(Octets[1]) * 256 + int(Octets[2]);
-	MyCountry = Class'CountryTagsDatabase'.Static.GetCountryTag(Decimal, MasterHandler.bShortTags);
+	MyCountry = Class'CountryTagsDatabase'.Static.GetCountryTag(Left(IP, InStr(IP, ":")), MasterHandler.HostWanIpAddr, MasterHandler.bShortTags);
 	return true;
 }
